@@ -1,0 +1,108 @@
+package com.assignment.RobobankCSP.parser;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
+
+import ch.qos.logback.core.net.SyslogOutputStream;
+
+import com.assignment.RobobankCSP.model.Record;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+@Component
+public class CustomerStatementParserServiceimpl implements CustomerStatementParserService {
+	
+	@SuppressWarnings("unchecked")
+	public List<Record> parseStament(MultipartFile file) throws JsonSyntaxException, JsonIOException, IOException, JSONException{
+		 Gson gson = new Gson();
+		 /*Path filepath = Paths.get(dir.toString(), file.getOriginalFilename());
+
+		    try (OutputStream os = Files.newOutputStream(filepath)) {
+		        os.write(file.getBytes());
+		    }*/
+		 ObjectMapper objectMapper = new ObjectMapper();
+		 File convFile = new File(System.getProperty("java.io.tmpdir")+"/"+file.getOriginalFilename());
+		 ((File) file).delete();
+		 file.transferTo(convFile);
+		 String jsonCarArray= readFile(convFile);
+		 List<Record> records = new ArrayList<>();
+		 records=objectMapper.readValue(jsonCarArray, new TypeReference<List<Record>>(){});
+		 /*Path pathArray = Paths.get(convFile.toURI());
+		Record[] recordsarr = gson.fromJson(Files.newBufferedReader(
+				pathArray, StandardCharsets.UTF_8), Record[].class);
+		
+		JSONArray jsonarray = new JSONArray(recordsarr);
+		
+		for (int i = 0; i < jsonarray.length(); i++) {
+		    JSONObject jsonobject = (JSONObject) jsonarray.getJSONObject(i);
+		    Record record= new Record();
+		    record.setTransactionRef(Integer.parseInt(jsonobject.getString("Reference"))); 
+		    record.setAccountNumber(jsonobject.getString("AccountNumber"));
+		    record.setDescription(jsonobject.getString("Description"));
+		    record.setStartBalance(Double.valueOf(jsonobject.getString("Start Balance")));
+		    record.setEndBalance(Double.valueOf(jsonobject.getString("End Balance")));
+		    record.setMutation(Double.valueOf(jsonobject.getString("Mutation")));
+	    String url = jsonobject.getString("url");
+		    records.add(record);
+		}
+		*/
+		/* records = gson.fromJson(Files.newBufferedReader(
+				pathArray, StandardCharsets.UTF_8), ArrayList.class);*/
+		
+//		records.forEach(s->s.toString());*/
+		/*
+		Record[] recordsarr = gson.fromJson(Files.newBufferedReader(
+				pathArray, StandardCharsets.UTF_8), Record[].class);*/
+		/* for(int i=0; i < records.size();i++) {
+			 Record r= new Record();
+			 r.setTransactionRef(records.get(i).getTransactionRef());
+			 r.setAccountNumber(records.get(i).getAccountNumber());
+			 r.setDescription(records.get(i).getDescription());
+			 r.setStartBalance(records.get(i).getStartBalance());
+			 r.setMutation(records.get(i).getMutation());
+			 r.setEndBalance(records.get(i).getEndBalance());
+			 records.add(r)
+		 }*/
+		return records;
+		
+		
+		
+		
+	}
+
+	public static String readFile(File convFile) {
+	    String result = "";
+	    try {
+	        BufferedReader br = new BufferedReader(new FileReader(convFile));
+	        StringBuilder sb = new StringBuilder();
+	        String line = br.readLine();
+	        while (line != null) {
+	            sb.append(line);
+	            line = br.readLine();
+	        }
+	        result = sb.toString();
+	    } catch(Exception e) {
+	        e.printStackTrace();
+	    }
+	    return result;
+	}
+	}

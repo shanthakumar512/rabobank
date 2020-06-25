@@ -1,0 +1,48 @@
+package com.assignment.RobobankCSP.model;
+
+import java.util.List;
+
+import org.springframework.stereotype.Component;
+
+/**
+ * 
+ * @author Shanthakumar
+ *
+ */
+@Component
+public class AppResponse {
+	/*private String responseMessage;
+	private int responseCode;
+	
+	public String getResponseMessage() {
+		return responseMessage;
+	}
+
+	public void setResponseMessage(String responseMessage) {
+		this.responseMessage = responseMessage;
+	}
+
+	public int getResponseCode() {
+		return responseCode;
+	}
+
+	public void setResponseCode(int responseCode) {
+		this.responseCode = responseCode;
+	}
+*/
+	
+	private List<Record> Records;
+
+	public List<Record> getRecords() {
+		return Records;
+	}
+
+	public void setRecords(List<Record> records) {
+		Records = records;
+	}
+	
+	@Override
+	public String toString() {
+		return "Error [responseMessage=" + responseMessage + ", responseCode=" + responseCode + "]";
+	}
+}

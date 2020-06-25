@@ -1,0 +1,21 @@
+/**
+ * 
+ */
+package com.assignment.RobobankCSP.constant;
+
+/**
+ * @author Admin
+ *
+ */
+public class StatusConstants {
+	
+	public static final Integer HTTP_CODE_SUCCESS = 200;
+	public static final Integer HTTP_CODE_ERROR = 500;
+	public static final Integer HTTP_CODE_INVALID_INPUT = 406;
+	
+	//public 	
+	public static final String UNEXPECTED_SERVER_ERROR = "Unexpected server error!!";
+	public static final String VALIDATION_ERROR = "validation error!!";
+	public static final String VALIDATION_SUCCESS = "Validation success!!";
+
+}

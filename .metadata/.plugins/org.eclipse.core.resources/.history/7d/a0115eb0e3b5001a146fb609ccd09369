@@ -1,0 +1,5 @@
+package com.assignment.RobobankCSP.model;
+
+public class Record {
+
+}

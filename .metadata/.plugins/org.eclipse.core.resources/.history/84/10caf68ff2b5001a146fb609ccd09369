@@ -1,0 +1,38 @@
+package com.assignment.RobobankCSP.services.impl;
+
+import java.util.List;
+
+import com.assignment.RobobankCSP.model.Record;
+import com.assignment.RobobankCSP.services.ValidatorService;
+
+public class ValidatorServiceImpl implements ValidatorService {
+
+	@Override
+	public List<Record> getDuplicateRecords(List<Record> records) {
+		Map<Integer, Record> uniqeRecords = new HashMap<Integer, Record>();
+		List<Record> duplicateRecords = new ArrayList<Record>();
+		for (Record record : records) {
+			if (uniqeRecords.containsKey(record.getTransactionRef())) {
+				duplicateRecords.add(record);
+			} else {
+				uniqeRecords.put(record.getTransactionRef(), record);
+			}
+		}
+		List<Record> finalDuplicateRecords = new ArrayList<Record>();
+		finalDuplicateRecords.addAll(duplicateRecords);
+		for (Record record : duplicateRecords) {
+			if (null != uniqeRecords.get(record.getTransactionRef())) {
+				finalDuplicateRecords.add(uniqeRecords.get(record.getTransactionRef()));
+				uniqeRecords.remove(record.getTransactionRef());
+			}
+		}
+		return finalDuplicateRecords;
+	}
+
+	@Override
+	public List<Record> getEndBalanceErrorRecords(List<Record> records) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

@@ -1,0 +1,12 @@
+/**
+ * 
+ */
+package com.assignment.RobobankCSP.parser;
+
+/**
+ * @author Admin
+ *
+ */
+public interface CustomerStatementParserService {
+
+}

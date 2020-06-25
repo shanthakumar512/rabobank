@@ -1,0 +1,23 @@
+/**
+ * 
+ */
+package com.assignment.RobobankCSP.parser;
+
+import java.io.IOException;
+import java.util.List;
+
+import com.assignment.RobobankCSP.model.Record;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
+
+/**
+ * @author Admin
+ *
+ */
+public interface CustomerStatementParserService {
+	
+	public List<Record> parseStament() throws JsonSyntaxException, JsonIOException, IOException;
+	
+	public void writeToJson() throws JsonIOException, IOException;
+
+}

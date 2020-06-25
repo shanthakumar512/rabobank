@@ -1,0 +1,158 @@
+package com.assignment.RobobankCSP.model;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class Record {
+	private int Reference;
+	private String AccountNumber;
+	private double Description;
+	private double StartBalance;
+	private String Mutation;
+	private double EndBalance;
+	/**
+	 * @return the transactionRef
+	 */
+	/*public int getTransactionRef() {
+		return transactionRef;
+	}
+	*//**
+	 * @param transactionRef the transactionRef to set
+	 *//*
+	public void setTransactionRef(int transactionRef) {
+		this.transactionRef = transactionRef;
+	}
+	*//**
+	 * @return the accountNumber
+	 *//*
+	public String getAccountNumber() {
+		return accountNumber;
+	}
+	*//**
+	 * @param accountNumber the accountNumber to set
+	 *//*
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
+	}
+	*//**
+	 * @return the startBalance
+	 *//*
+	public double getStartBalance() {
+		return startBalance;
+	}
+	*//**
+	 * @param startBalance the startBalance to set
+	 *//*
+	public void setStartBalance(double startBalance) {
+		this.startBalance = startBalance;
+	}
+	*//**
+	 * @return the mutation
+	 *//*
+	public double getMutation() {
+		return mutation;
+	}
+	*//**
+	 * @param mutation the mutation to set
+	 *//*
+	public void setMutation(double mutation) {
+		this.mutation = mutation;
+	}
+	*//**
+	 * @return the description
+	 *//*
+	public String getDescription() {
+		return description;
+	}
+	*//**
+	 * @param description the description to set
+	 *//*
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	*//**
+	 * @return the endBalance
+	 *//*
+	public double getEndBalance() {
+		return endBalance;
+	}
+	*//**
+	 * @param endBalance the endBalance to set
+	 *//*
+	public void setEndBalance(double endBalance) {
+		this.endBalance = endBalance;
+	}
+*/
+	/**
+	 * @return the reference
+	 */
+	public int getReference() {
+		return Reference;
+	}
+	/**
+	 * @param reference the reference to set
+	 */
+	public void setReference(int reference) {
+		Reference = reference;
+	}
+	/**
+	 * @return the accountNumber
+	 */
+	public String getAccountNumber() {
+		return AccountNumber;
+	}
+	/**
+	 * @param accountNumber the accountNumber to set
+	 */
+	public void setAccountNumber(String accountNumber) {
+		AccountNumber = accountNumber;
+	}
+	/**
+	 * @return the description
+	 */
+	public double getDescription() {
+		return Description;
+	}
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(double description) {
+		Description = description;
+	}
+	/**
+	 * @return the startBalance
+	 */
+	public double getStartBalance() {
+		return StartBalance;
+	}
+	/**
+	 * @param startBalance the startBalance to set
+	 */
+	public void setStartBalance(double startBalance) {
+		StartBalance = startBalance;
+	}
+	/**
+	 * @return the mutation
+	 */
+	public String getMutation() {
+		return Mutation;
+	}
+	/**
+	 * @param mutation the mutation to set
+	 */
+	public void setMutation(String mutation) {
+		Mutation = mutation;
+	}
+	/**
+	 * @return the endBalance
+	 */
+	public double getEndBalance() {
+		return EndBalance;
+	}
+	/**
+	 * @param endBalance the endBalance to set
+	 */
+	public void setEndBalance(double endBalance) {
+		EndBalance = endBalance;
+	}
+}

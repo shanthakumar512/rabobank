@@ -1,0 +1,12 @@
+1592980038494	Delete element
+1592986139205	Rename package 'om.assignment.RobobankCSP.services'
+1592986514184	Rename type 'CustomerStatementParserService'
+1592998566801	Encapsulate field 'errorRecords'
+1592998592008	Encapsulate field 'result'
+1593056629241	Move 'Records.json' to 'RobobankCSP'
+1593056703043	Move 'Records.json' to 'test'
+1593057867199	Rename package 'com.assignment.RobobankCSP'
+1593057931200	Move compilation unit
+1593057946248	Delete element
+1593057996420	Rename package 'com.assignment.rabobankcsp.parser'
+1593058023115	Rename package 'com.assignment.rabobankcsp.services'

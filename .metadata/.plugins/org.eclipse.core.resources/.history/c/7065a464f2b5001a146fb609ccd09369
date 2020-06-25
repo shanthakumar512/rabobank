@@ -1,0 +1,12 @@
+/**
+ * 
+ */
+package com.assignment.RobobankCSP.services;
+
+/**
+ * @author Admin
+ *
+ */
+public class ValidatorService {
+
+}

@@ -1,0 +1,20 @@
+/**
+ * 
+ */
+package com.assignment.RobobankCSP.services;
+
+import java.util.List;
+
+import com.assignment.RobobankCSP.model.Record;
+
+/**
+ * @author Admin
+ *
+ */
+public interface ValidatorService {
+
+	public List<Record> getDuplicateRecords(List<Record> records);
+	
+	public List<Record> getEndBalanceErrorRecords(List<Record> records);	
+	
+}

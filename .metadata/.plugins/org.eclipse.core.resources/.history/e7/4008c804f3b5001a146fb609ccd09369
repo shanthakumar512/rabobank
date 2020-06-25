@@ -1,0 +1,20 @@
+/**
+ * 
+ */
+package com.assignment.RobobankCSP.parser;
+
+import java.util.List;
+
+import com.assignment.RobobankCSP.model.Record;
+
+/**
+ * @author Admin
+ *
+ */
+public interface CustomerStatementParserService {
+	
+	public List<Record> parseStament();
+	
+	public void writeToJson();
+
+}

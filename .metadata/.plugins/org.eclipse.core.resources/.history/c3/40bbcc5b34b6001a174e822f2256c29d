@@ -1,0 +1,86 @@
+package com.assignment.RobobankCSP.model;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class Record {
+	private int transactionRef;
+	private String accountNumber;
+	private double startBalance;
+	private double mutation;
+	private String description;
+	private double endBalance;
+	/**
+	 * @return the transactionRef
+	 */
+	public int getTransactionRef() {
+		return transactionRef;
+	}
+	/**
+	 * @param transactionRef the transactionRef to set
+	 */
+	public void setTransactionRef(int transactionRef) {
+		this.transactionRef = transactionRef;
+	}
+	/**
+	 * @return the accountNumber
+	 */
+	public String getAccountNumber() {
+		return accountNumber;
+	}
+	/**
+	 * @param accountNumber the accountNumber to set
+	 */
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
+	}
+	/**
+	 * @return the startBalance
+	 */
+	public double getStartBalance() {
+		return startBalance;
+	}
+	/**
+	 * @param startBalance the startBalance to set
+	 */
+	public void setStartBalance(double startBalance) {
+		this.startBalance = startBalance;
+	}
+	/**
+	 * @return the mutation
+	 */
+	public double getMutation() {
+		return mutation;
+	}
+	/**
+	 * @param mutation the mutation to set
+	 */
+	public void setMutation(double mutation) {
+		this.mutation = mutation;
+	}
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	/**
+	 * @return the endBalance
+	 */
+	public double getEndBalance() {
+		return endBalance;
+	}
+	/**
+	 * @param endBalance the endBalance to set
+	 */
+	public void setEndBalance(double endBalance) {
+		this.endBalance = endBalance;
+	}
+
+}
