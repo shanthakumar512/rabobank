@@ -34,9 +34,7 @@ public class CustomerStatementParserServiceimpl implements CustomerStatementPars
 		String fileOriginalName = file.getOriginalFilename();
 		File convFile;
 		if (file.getOriginalFilename().contains("\\")) {
-
 			Path path = Paths.get(fileOriginalName);
-
 			Path fileName = path.getFileName();
 			convFile = new File(System.getProperty("java.io.tmpdir") + "/" + new Date().getTime() + fileName);
 		} else

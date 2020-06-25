@@ -4,16 +4,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -67,13 +63,6 @@ public class CustomerStatementProcessorController {
 		return retreiveRecords(multipart);
 	}
 
-	@ExceptionHandler(Exception.class)
-	public @ResponseBody ProcessedStatement handleException(HttpServletRequest request, Exception ex) {
-		ProcessedStatement processedStatement = new ProcessedStatement();
-		logger.error("Error Occured", ex.getMessage());
-		processedStatement.setResult(StatusConstants.INTERNAL_SERVER_ERROR);
-		return processedStatement;
-	}
 	
 	/**
 	 * Method to perform validation on retrieved records
@@ -117,6 +106,9 @@ public class CustomerStatementProcessorController {
 			logger.error("Bad request. Exception while parsing Json");
 			processedStatement.setResult(StatusConstants.BAD_REQUEST);
 		}
+		} else {
+		logger.error("Bad request. Empty Json file");
+		processedStatement.setResult(StatusConstants.BAD_REQUEST);
 		}
 		return processedStatement;
 		
