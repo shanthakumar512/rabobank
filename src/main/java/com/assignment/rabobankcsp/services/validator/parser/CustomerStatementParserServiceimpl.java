@@ -4,27 +4,19 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
-
-import ch.qos.logback.core.net.SyslogOutputStream;
 
 import com.assignment.rabobankcsp.model.Record;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -33,27 +25,54 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 @Component
 public class CustomerStatementParserServiceimpl implements CustomerStatementParserService {
-	
-	@SuppressWarnings("unchecked")
+	Logger logger = LoggerFactory.getLogger(CustomerStatementParserServiceimpl.class);
+	/**
+	 * Method used to parse the json file and returns list of records
+	 */
 	public List<Record> parseStament(MultipartFile file) throws JsonSyntaxException, JsonIOException, IOException, JSONException{
-		 File convFile = new File(System.getProperty("java.io.tmpdir")+"/"+new Date().getTime()+file.getOriginalFilename());
+		 String fileOriginalName=file.getOriginalFilename();
+		 File convFile;
+		 if(file.getOriginalFilename().contains("\\")) {
+			 
+			 Path path = Paths.get(fileOriginalName); 
+			  
+		        Path fileName = path.getFileName();
+			  convFile = new File(System.getProperty("java.io.tmpdir")+"/"+new Date().getTime()+fileName);
+		/* List<Object> fileName= Arrays.asList(file.getOriginalFilename().split("\\"));
+		 if(fileName.size()>1) {
+			 fileOriginalName= fileName.get(fileName.size()-1).toString();
+		 }*/
+		 } else 
+		  convFile = new File(System.getProperty("java.io.tmpdir")+"/"+new Date().getTime()+fileOriginalName);
+		 
 		 file.transferTo(convFile);
+		 logger.info("Uploaded Json file stored in temp");
 		 return getjsonRecords(convFile);
 		 
 	}
 	
+	/**
+	 * This method returns string of json arrays to parse the records.
+	 */
 	public List<Record> getjsonRecords(File convFile) throws JsonMappingException, JsonProcessingException{
-		ObjectMapper objectMapper = new ObjectMapper();
+		 ObjectMapper objectMapper = new ObjectMapper();
+		 logger.info("File converted to String with Json Arrays", convFile.getName());
 		 String jsonCarArray= readFile(convFile);
-		 List<Record> records = new ArrayList<>();
-		 records=objectMapper.readValue(jsonCarArray, new TypeReference<List<Record>>(){});
+		 List<Record> records =objectMapper.readValue(jsonCarArray, new TypeReference<List<Record>>(){});
+		 logger.info("Json file successfully parsed to return list of Records.");
 		 return records;
 	}
-
+	
+	/**
+	 * This method will convert json file to string
+	 * @param convFile
+	 * @return string of json input
+	 */
 	public static String readFile(File convFile) {
 	    String result = "";
 	    try {
-	        BufferedReader br = new BufferedReader(new FileReader(convFile));
+	        @SuppressWarnings("resource")
+			BufferedReader br = new BufferedReader(new FileReader(convFile));
 	        StringBuilder sb = new StringBuilder();
 	        String line = br.readLine();
 	        while (line != null) {

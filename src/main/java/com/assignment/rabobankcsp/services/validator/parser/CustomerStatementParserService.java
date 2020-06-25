@@ -17,7 +17,7 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 
 /**
- * @author Admin
+ * @author Shanthakumar
  *
  */
 public interface CustomerStatementParserService {

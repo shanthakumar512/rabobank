@@ -4,7 +4,7 @@
 package com.assignment.rabobankcsp.constant;
 
 /**
- * @author Admin
+ * @author Shanthakumar
  *
  */
 public class StatusConstants {

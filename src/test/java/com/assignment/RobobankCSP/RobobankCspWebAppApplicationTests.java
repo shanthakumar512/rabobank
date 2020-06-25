@@ -1,14 +1,9 @@
 package com.assignment.RobobankCSP;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -16,8 +11,6 @@ import com.assignment.rabobankcsp.model.ErrorRecords;
 import com.assignment.rabobankcsp.model.Record;
 import com.assignment.rabobankcsp.services.validator.ValidatorService;
 import com.assignment.rabobankcsp.services.validator.ValidatorServiceImpl;
-import com.assignment.rabobankcsp.services.validator.parser.CustomerStatementParserService;
-import com.assignment.rabobankcsp.services.validator.parser.CustomerStatementParserServiceimpl;
 
 @SpringBootTest
 class RobobankCspWebAppApplicationTests {
@@ -44,8 +37,8 @@ class RobobankCspWebAppApplicationTests {
 	@Test
 	public void getDuplicateRecordsTestCaseWithOutDuplilcate() {
 		List<Record> inputList = Arrays.asList(
-				new Record(172823, "NL69ABNA0433647324", 66.72, -41.74, "Tickets for Willem Theuß", 24.98),
-				new Record(172833, "NL43AEGO0773393871", 16.52, +43.09, "Tickets for Willem Theuß", 59.61));
+				new Record(789456, "NL69ABNA0433647324", 66.72, -41.74, "Tickets for Willem Theuß", 24.98),
+				new Record(123654, "NL43AEGO0773393871", 16.52, +43.09, "Tickets for Willem Theuß", 59.61));
 		ValidatorService validatorServiceImpl = new ValidatorServiceImpl();
 		List<ErrorRecords> duplicateRecords = validatorServiceImpl.getDuplicateRecords(inputList);
 		assertEquals(0, duplicateRecords.size());
@@ -60,7 +53,7 @@ class RobobankCspWebAppApplicationTests {
 	@Test
 	public void getEndBalanceErrorRecordsTestCaseWithWrongValue() {
 		List<Record> inputList = Arrays.asList(
-				new Record(172833, "NL69ABNA0433647324", 66.72, -41.74, "Tickets for Willem Theuß", 50.98),
+				new Record(172833, "NL69eBNA0433647324", 66.72, -41.74, "Tickets for Willem Theuß", 50.98),
 				new Record(172833, "NL43AEGO0773393871", 16.52, +43.09, "Tickets for Willem Theuß", 25.80));
 		ValidatorService validatorServiceImpl = new ValidatorServiceImpl();
 		List<ErrorRecords> endBalanceErrorRecords = validatorServiceImpl.getEndBalanceErrorRecords(inputList);
@@ -82,26 +75,4 @@ class RobobankCspWebAppApplicationTests {
 		List<ErrorRecords> endBalanceErrorRecords = validatorServiceImpl.getEndBalanceErrorRecords(inputList);
 		assertEquals(0, endBalanceErrorRecords.size());
 	}
-
-	/**
-	 * Type : Positive 
-	 * scenario : Processing the input CSV file and extracting
-	 * values as POJO object for validation process
-	 *//*
-	@Test
-	public void extractStatmentFromJsonTestCase() {
-		CustomerStatementParserService customerStatementParserService = new CustomerStatementParserServiceimpl();
-		File inputFile = new File("./Records.json");
-		try {
-			customerStatementParserService.getjsonRecords(inputFile);
-			assertTrue(true, "Json parsed Succesfully");
-		} catch (IOException e) {
-			Assertions.fail("File processing error!!" + e.getMessage());
-			e.printStackTrace();
-		} catch (Exception e) {
-			Assertions.fail(e.getMessage());
-			e.printStackTrace();
-		}
-	}
-*/
 }

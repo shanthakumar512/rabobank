@@ -9,10 +9,9 @@ import com.assignment.rabobankcsp.model.ErrorRecords;
 import com.assignment.rabobankcsp.model.Record;
 
 /**
- * @author Admin
+ * @author Shanthakumar
  *
  */
-
 
 public interface ValidatorService {
 

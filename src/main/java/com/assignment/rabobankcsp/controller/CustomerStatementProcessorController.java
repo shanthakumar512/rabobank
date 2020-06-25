@@ -1,14 +1,17 @@
 package com.assignment.rabobankcsp.controller;
 
-import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.json.JSONException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,73 +19,106 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.assignment.rabobankcsp.constant.StatusConstants;
-import com.assignment.rabobankcsp.model.AppResponse;
+import com.assignment.rabobankcsp.model.ProcessedStatement;
 import com.assignment.rabobankcsp.model.ErrorRecords;
 import com.assignment.rabobankcsp.model.Record;
 import com.assignment.rabobankcsp.services.validator.ValidatorService;
 import com.assignment.rabobankcsp.services.validator.parser.CustomerStatementParserService;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
 
-@RestController
+@Controller
 @RequestMapping("/")
 public class CustomerStatementProcessorController {
-	
+
 	@Autowired
 	private ValidatorService validatorService;
-	
+
 	@Autowired
 	private CustomerStatementParserService customerStatementParserService;
-	
+
+	Logger logger = LoggerFactory.getLogger(CustomerStatementProcessorController.class);
+
 	@RequestMapping(value = "/test", method = RequestMethod.GET)
-	public @ResponseBody AppResponse test() throws Exception {
-		AppResponse appResponse = new AppResponse();
-		return appResponse;
+	public @ResponseBody ProcessedStatement test() throws Exception {
+		logger.info("controller entered Test() ");
+		ProcessedStatement processedStatement = new ProcessedStatement();
+		return processedStatement;
 	}
 
-	@PostMapping(value="/processStatement", produces = MediaType.APPLICATION_JSON_VALUE)
-	public  @ResponseBody AppResponse processStatement(@RequestParam("file") MultipartFile multipart)  throws Exception{
-		AppResponse appResponse = new AppResponse();
-		if (!multipart.isEmpty()) {
-		if (multipart.getContentType().equalsIgnoreCase(MediaType.APPLICATION_JSON_VALUE)) {
-		
+	@RequestMapping(value = "/rabobank", method = RequestMethod.GET)
+	public String index() {
+		logger.info("controller entered index() ");
+		return "upload";
+	}
+	
+	@PostMapping(value = "/rabobank/processStatement",  produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody ProcessedStatement processStatements (@RequestParam("file") MultipartFile multipart)
+			throws Exception {
+		return retreiveRecords(multipart);
+	}
+	
+	@PostMapping(value = "/processStatement", produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody ProcessedStatement processStatement(@RequestParam("file") MultipartFile multipart)
+			throws Exception {
+		return retreiveRecords(multipart);
+	}
+
+	@ExceptionHandler(Exception.class)
+	public @ResponseBody ProcessedStatement handleException(HttpServletRequest request, Exception ex) {
+		ProcessedStatement processedStatement = new ProcessedStatement();
+		logger.error("Error Occured", ex.getMessage());
+		processedStatement.setResult(StatusConstants.INTERNAL_SERVER_ERROR);
+		return processedStatement;
+	}
+	
+	/**
+	 * Method to perform validation on retrieved records
+	 * @param multipart
+	 * @return
+	 * @throws JsonSyntaxException
+	 * @throws JsonIOException
+	 * @throws IOException
+	 * @throws JSONException
+	 */
+	private ProcessedStatement retreiveRecords(MultipartFile multipart) throws JsonSyntaxException, JsonIOException, IOException, JSONException {
+		ProcessedStatement processedStatement = new ProcessedStatement();
+		logger.info("File Type", multipart.getContentType());
+		if(!multipart.isEmpty()) {
+//		if (multipart.getContentType().equalsIgnoreCase(MediaType.APPLICATION_JSON_VALUE)) {
 			List<Record> extractedRecords = customerStatementParserService.parseStament(multipart);
+			logger.info("Number of Transactions in Statement", extractedRecords.size());
 			List<ErrorRecords> duplicateRecords = new ArrayList<ErrorRecords>();
 			List<ErrorRecords> endBalanceRecords = new ArrayList<ErrorRecords>();
 			duplicateRecords.addAll(validatorService.getDuplicateRecords(extractedRecords));
+			logger.info("Number of duplicate References in Statement", duplicateRecords.size());
 			endBalanceRecords.addAll(validatorService.getEndBalanceErrorRecords(extractedRecords));
+			logger.info("Number of records with End Balance Issue", duplicateRecords.size());
 			if (!duplicateRecords.isEmpty() && endBalanceRecords.isEmpty()) {
-				appResponse.setResult(StatusConstants.DUPLICATE_REFERENCE);
-				appResponse.setErrorRecords(duplicateRecords);
+				processedStatement.setResult(StatusConstants.DUPLICATE_REFERENCE);
+				processedStatement.setErrorRecords(duplicateRecords);
 			} else if (duplicateRecords.isEmpty() && !endBalanceRecords.isEmpty()) {
-				appResponse.setResult(StatusConstants.INCORRECT_END_BALANCE);
-				appResponse.setErrorRecords(endBalanceRecords);
-			}  else if (!duplicateRecords.isEmpty() && !endBalanceRecords.isEmpty()) {
-				appResponse.setResult(StatusConstants.DUPLICATE_REFERENCE_INCORRECT_END_BALANCE);
-				appResponse.setErrorRecords(duplicateRecords);
-				appResponse.setErrorRecords(endBalanceRecords);
-			}else  {
-				appResponse.setResult(StatusConstants.SUCCESSFUL);
+				processedStatement.setResult(StatusConstants.INCORRECT_END_BALANCE);
+				processedStatement.setErrorRecords(endBalanceRecords);
+			} else if (!duplicateRecords.isEmpty() && !endBalanceRecords.isEmpty()) {
+				processedStatement.setResult(StatusConstants.DUPLICATE_REFERENCE_INCORRECT_END_BALANCE);
+				processedStatement.setErrorRecords(duplicateRecords);
+				processedStatement.setErrorRecords(endBalanceRecords);
+				logger.info("Number of Records with duplicate reference and  incorrect end balance",
+						endBalanceRecords.size() + duplicateRecords.size());
+			} else {
+				logger.debug("Request successful");
+				processedStatement.setResult(StatusConstants.SUCCESSFUL);
 			}
 		} else {
-			appResponse.setResult(StatusConstants.BAD_REQUEST);
+			logger.error("Bad request. Exception while parsing Json");
+			processedStatement.setResult(StatusConstants.BAD_REQUEST);
 		}
+//		}
+		return processedStatement;
 		
-		
-		}
-		
-		
-		return appResponse;
-		
-	}
-
-	 
-	@ExceptionHandler(Exception.class)
-	public @ResponseBody AppResponse handleException(HttpServletRequest request, Exception ex) {
-		AppResponse appResponse = new AppResponse();
-		appResponse.setResult(StatusConstants.INTERNAL_SERVER_ERROR);
-		return appResponse;
 	}
 }
