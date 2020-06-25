@@ -1,4 +1,4 @@
-package com.assignment.rabobankcsp.services.validator.parser;
+package com.assignment.rabobankcsp.services.parser;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -63,7 +63,7 @@ public class CustomerStatementParserServiceimpl implements CustomerStatementPars
 	 * @param convFile
 	 * @return string of json input
 	 */
-	public static String readFile(File convFile) {
+	public  String readFile(File convFile) {
 	    String result = "";
 	    try {
 	        @SuppressWarnings("resource")

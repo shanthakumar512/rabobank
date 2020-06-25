@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.assignment.rabobankcsp.services.validator.parser;
+package com.assignment.rabobankcsp.services.parser;
 
 import java.io.File;
 import java.io.IOException;

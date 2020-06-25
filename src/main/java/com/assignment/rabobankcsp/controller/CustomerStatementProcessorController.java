@@ -21,8 +21,8 @@ import com.assignment.rabobankcsp.constant.StatusConstants;
 import com.assignment.rabobankcsp.model.ProcessedStatement;
 import com.assignment.rabobankcsp.model.ErrorRecords;
 import com.assignment.rabobankcsp.model.Record;
+import com.assignment.rabobankcsp.services.parser.CustomerStatementParserService;
 import com.assignment.rabobankcsp.services.validator.ValidatorService;
-import com.assignment.rabobankcsp.services.validator.parser.CustomerStatementParserService;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 
@@ -37,13 +37,7 @@ public class CustomerStatementProcessorController {
 	private CustomerStatementParserService customerStatementParserService;
 
 	Logger logger = LoggerFactory.getLogger(CustomerStatementProcessorController.class);
-
-	@RequestMapping(value = "/test", method = RequestMethod.GET)
-	public @ResponseBody ProcessedStatement test() throws Exception {
-		logger.info("controller entered Test() ");
-		ProcessedStatement processedStatement = new ProcessedStatement();
-		return processedStatement;
-	}
+	
 
 	@RequestMapping(value = "/rabobank", method = RequestMethod.GET)
 	public String index() {
@@ -80,8 +74,8 @@ public class CustomerStatementProcessorController {
 		if (multipart.getContentType().equalsIgnoreCase(MediaType.APPLICATION_JSON_VALUE)) {
 			List<Record> extractedRecords = customerStatementParserService.parseStament(multipart);
 			logger.info("Number of Transactions in Statement {}", extractedRecords.size());
-			List<ErrorRecords> duplicateRecords = new ArrayList<ErrorRecords>();
-			List<ErrorRecords> endBalanceRecords = new ArrayList<ErrorRecords>();
+			List<ErrorRecords> duplicateRecords = new ArrayList<>();
+			List<ErrorRecords> endBalanceRecords = new ArrayList<>();
 			duplicateRecords.addAll(validatorService.getDuplicateRecords(extractedRecords));
 			logger.info("Number of duplicate References in Statement {}", duplicateRecords.size());
 			endBalanceRecords.addAll(validatorService.getEndBalanceErrorRecords(extractedRecords));
