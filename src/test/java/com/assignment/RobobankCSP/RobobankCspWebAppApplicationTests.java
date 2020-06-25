@@ -6,13 +6,13 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-
+import com.assignment.rabobankcsp.RobobankCspWebAppApplication;
 import com.assignment.rabobankcsp.model.ErrorRecords;
 import com.assignment.rabobankcsp.model.Record;
 import com.assignment.rabobankcsp.services.validator.ValidatorService;
 import com.assignment.rabobankcsp.services.validator.ValidatorServiceImpl;
 
-@SpringBootTest
+@SpringBootTest(classes = RobobankCspWebAppApplication.class)
 class RobobankCspWebAppApplicationTests {
 
 	@Test

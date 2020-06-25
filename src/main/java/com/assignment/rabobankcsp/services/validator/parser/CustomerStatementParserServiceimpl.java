@@ -29,26 +29,23 @@ public class CustomerStatementParserServiceimpl implements CustomerStatementPars
 	/**
 	 * Method used to parse the json file and returns list of records
 	 */
-	public List<Record> parseStament(MultipartFile file) throws JsonSyntaxException, JsonIOException, IOException, JSONException{
-		 String fileOriginalName=file.getOriginalFilename();
-		 File convFile;
-		 if(file.getOriginalFilename().contains("\\")) {
-			 
-			 Path path = Paths.get(fileOriginalName); 
-			  
-		        Path fileName = path.getFileName();
-			  convFile = new File(System.getProperty("java.io.tmpdir")+"/"+new Date().getTime()+fileName);
-		/* List<Object> fileName= Arrays.asList(file.getOriginalFilename().split("\\"));
-		 if(fileName.size()>1) {
-			 fileOriginalName= fileName.get(fileName.size()-1).toString();
-		 }*/
-		 } else 
-		  convFile = new File(System.getProperty("java.io.tmpdir")+"/"+new Date().getTime()+fileOriginalName);
-		 
-		 file.transferTo(convFile);
-		 logger.info("Uploaded Json file stored in temp");
-		 return getjsonRecords(convFile);
-		 
+	public List<Record> parseStament(MultipartFile file)
+			throws JsonSyntaxException, JsonIOException, IOException, JSONException {
+		String fileOriginalName = file.getOriginalFilename();
+		File convFile;
+		if (file.getOriginalFilename().contains("\\")) {
+
+			Path path = Paths.get(fileOriginalName);
+
+			Path fileName = path.getFileName();
+			convFile = new File(System.getProperty("java.io.tmpdir") + "/" + new Date().getTime() + fileName);
+		} else
+			convFile = new File(System.getProperty("java.io.tmpdir") + "/" + new Date().getTime() + fileOriginalName);
+
+		file.transferTo(convFile);
+		logger.info("Uploaded Json file stored in temp");
+		return getjsonRecords(convFile);
+
 	}
 	
 	/**
@@ -56,7 +53,7 @@ public class CustomerStatementParserServiceimpl implements CustomerStatementPars
 	 */
 	public List<Record> getjsonRecords(File convFile) throws JsonMappingException, JsonProcessingException{
 		 ObjectMapper objectMapper = new ObjectMapper();
-		 logger.info("File converted to String with Json Arrays", convFile.getName());
+		 logger.info("File converted to String with Json Arrays {}", convFile.getName());
 		 String jsonCarArray= readFile(convFile);
 		 List<Record> records =objectMapper.readValue(jsonCarArray, new TypeReference<List<Record>>(){});
 		 logger.info("Json file successfully parsed to return list of Records.");

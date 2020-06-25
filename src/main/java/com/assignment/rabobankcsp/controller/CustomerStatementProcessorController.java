@@ -86,17 +86,17 @@ public class CustomerStatementProcessorController {
 	 */
 	private ProcessedStatement retreiveRecords(MultipartFile multipart) throws JsonSyntaxException, JsonIOException, IOException, JSONException {
 		ProcessedStatement processedStatement = new ProcessedStatement();
-		logger.info("File Type", multipart.getContentType());
+		logger.info("File Type {}", multipart.getContentType());
 		if(!multipart.isEmpty()) {
-//		if (multipart.getContentType().equalsIgnoreCase(MediaType.APPLICATION_JSON_VALUE)) {
+		if (multipart.getContentType().equalsIgnoreCase(MediaType.APPLICATION_JSON_VALUE)) {
 			List<Record> extractedRecords = customerStatementParserService.parseStament(multipart);
-			logger.info("Number of Transactions in Statement", extractedRecords.size());
+			logger.info("Number of Transactions in Statement {}", extractedRecords.size());
 			List<ErrorRecords> duplicateRecords = new ArrayList<ErrorRecords>();
 			List<ErrorRecords> endBalanceRecords = new ArrayList<ErrorRecords>();
 			duplicateRecords.addAll(validatorService.getDuplicateRecords(extractedRecords));
-			logger.info("Number of duplicate References in Statement", duplicateRecords.size());
+			logger.info("Number of duplicate References in Statement {}", duplicateRecords.size());
 			endBalanceRecords.addAll(validatorService.getEndBalanceErrorRecords(extractedRecords));
-			logger.info("Number of records with End Balance Issue", duplicateRecords.size());
+			logger.info("Number of records with End Balance Issue {}", duplicateRecords.size());
 			if (!duplicateRecords.isEmpty() && endBalanceRecords.isEmpty()) {
 				processedStatement.setResult(StatusConstants.DUPLICATE_REFERENCE);
 				processedStatement.setErrorRecords(duplicateRecords);
@@ -107,7 +107,7 @@ public class CustomerStatementProcessorController {
 				processedStatement.setResult(StatusConstants.DUPLICATE_REFERENCE_INCORRECT_END_BALANCE);
 				processedStatement.setErrorRecords(duplicateRecords);
 				processedStatement.setErrorRecords(endBalanceRecords);
-				logger.info("Number of Records with duplicate reference and  incorrect end balance",
+				logger.info("Number of Records with duplicate reference and  incorrect end balance {}",
 						endBalanceRecords.size() + duplicateRecords.size());
 			} else {
 				logger.debug("Request successful");
@@ -117,7 +117,7 @@ public class CustomerStatementProcessorController {
 			logger.error("Bad request. Exception while parsing Json");
 			processedStatement.setResult(StatusConstants.BAD_REQUEST);
 		}
-//		}
+		}
 		return processedStatement;
 		
 	}

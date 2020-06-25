@@ -27,13 +27,13 @@ public class ValidatorServiceImpl implements ValidatorService {
 		for (Record record : records) {
 			
 			if (uniqeRecords.containsKey(record.getReference())) {
-				logger.info("Record reference is duplicate", record.getReference());
+				logger.info("Record reference is duplicate {}", record.getReference());
 				ErrorRecords e = new ErrorRecords();
 				e.setReference(record.getReference());
 				e.setAccountNumber(record.getAccountNumber());
 				duplicateRecords.add(e);
 			} else {
-				logger.info("Record reference is Unique", record.getReference());
+				logger.info("Record reference is Unique {}", record.getReference());
 				uniqeRecords.put(record.getReference(), record);
 			}
 		}
@@ -42,7 +42,7 @@ public class ValidatorServiceImpl implements ValidatorService {
 		
 		for (ErrorRecords record : duplicateRecords) {
 			if (null != uniqeRecords.get(record.getReference())) {
-				logger.info("Record with duplicate refernce is removed from Unique list", record.getReference());
+				logger.info("Record with duplicate refernce is removed from Unique list {}", record.getReference());
 				uniqeRecords.remove(record.getReference());
 			}
 		}
@@ -59,7 +59,7 @@ public class ValidatorServiceImpl implements ValidatorService {
 		List<ErrorRecords> endBalanceErrorRecords = new ArrayList<ErrorRecords>();
 		for (Record record : records) {
 			if (Math.round((record.getStartBalance() + record.getMutation()) - Math.round(record.getEndBalance())) != 0) {
-				logger.info("Error in End balance for record :", record.getReference());
+				logger.info("Error in End balance for record : {}", record.getReference());
 				ErrorRecords e = new ErrorRecords();
 				e.setReference(record.getReference());
 				e.setAccountNumber(record.getAccountNumber());
