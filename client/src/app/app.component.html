@@ -1,0 +1,21 @@
+<div> 
+    <label for="customFile"> Kindly upload  Customer Statement to be processed:</label>
+    <input type="file" id="customFile" (change)="selectFile($event)"> 
+   
+<button class="btn btn-primary" [disabled]="!selectedFiles" style="margin-left: 5px" (click)="upload()">Upload</button> 
+<br>
+<br>
+<div *ngIf="isUnSupportedFile">
+        <h3 style="text-align: left;color: red">****File Not Supported. Upload .json format file</h3>
+</div>
+<div *ngIf="displayProcessSection">
+<p > Your statement is uploaded successfully!!</p>
+<label > Click on the Process button to process the statement:</label>
+<button class="btn btn-primary" style="margin-left: 5px" (click)="processStatement()"> Start Process</button></div>
+</div>
+<br>
+<div *ngIf="isVisible">
+<h2 style="text-align: center;background-color: lime">Please find the statement report below</h2>
+<div> <h3 style="color: rgb(17, 0, 255)"> Result:  </h3> {{ result | json }}</div> 
+<div><h3  style="color: rgb(17, 0, 255)"> Errors :</h3>  {{  errorRecords | json}}</div>
+</div>
